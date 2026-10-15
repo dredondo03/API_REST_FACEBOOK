@@ -8,128 +8,328 @@
   },
   "item": [
     {
-      "name": "Crear_post",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Accept",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "formdata",
-          "formdata": [
-            {
-              "key": "title",
-              "value": "publicqacion no se que",
-              "type": "text"
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Comentario",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"author\": \"Darmin\",\r\n  \"content\": \"¡Qué buenas fotos mi bro!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            {
-              "key": "content",
-              "value": "el super viajeee",
-              "type": "text"
-            },
-            {
-              "key": "images[]",
-              "type": "file",
-              "src": [
-                "/C:/Users/dredo/OneDrive/Pictures/Screenshots/Captura de pantalla 2026-08-18 184326.png"
-              ]
-            },
-            {
-              "key": "images[]",
-              "type": "file",
-              "src": [
-                "/C:/Users/dredo/OneDrive/Pictures/Screenshots/Captura de pantalla 2026-08-18 192123.png"
+            "url": {
+              "raw": "{{base_url}}/api/v1/posts/{{post_id}}/comments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "posts",
+                "{{post_id}}",
+                "comments"
               ]
             }
-          ]
-        },
-        "url": {
-          "raw": "{{base_url}}/api/posts",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "api",
-            "posts"
-          ]
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "Listar publicaciones",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": ""
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Comentario",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"author\": \"Darmin\",\r\n  \"content\": \"¡Qué buenas fotos mi bro!\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "Publish",
+      "item": [
+        {
+          "name": "Crear_post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "me fui pa new york",
+                  "type": "text"
+                },
+                {
+                  "key": "content",
+                  "value": "el rascacielos",
+                  "type": "text"
+                },
+                {
+                  "key": "images[]",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/dredo/OneDrive/Pictures/Screenshots/Captura de pantalla 2026-08-18 184326.png"
+                  ]
+                },
+                {
+                  "key": "images[]",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/dredo/OneDrive/Pictures/Screenshots/Captura de pantalla 2026-08-18 192123.png"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/posts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "posts"
+              ]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "{{base_url}}/api/posts/{{post_id}}/comments",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "api",
-            "posts",
-            "{{post_id}}",
-            "comments"
-          ]
+        {
+          "name": "Listar publicaciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/posts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Post",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": ""
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/posts?search=primer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "posts"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "primer"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/posts/{{post_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "posts",
+                "{{post_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "likes",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/posts/{{post_id}}/like",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "posts",
+                "{{post_id}}",
+                "like"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "likes",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": ""
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Delete",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/api/posts/{{post_id}}",
-          "host": [
-            "{{base_url}}"
+      "name": "auth",
+      "item": [
+        {
+          "name": "Registrar_user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Ana\", \"email\": \"ana@test.com\", \"password\": \"12345678\", \"password_confirmation\": \"12345678\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Inicio_sesion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "   const data = pm.response.json();\r\n   if (data.token) {\r\n       pm.collectionVariables.set(\"token\", data.token);\r\n   }"
+                ]
+              }
+            }
           ],
-          "path": [
-            "api",
-            "posts",
-            "{{post_id}}"
-          ]
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "   {\r\n     \"email\": \"ana@test.com\",\r\n     \"password\": \"12345678\"\r\n   }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cerrar_sesion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mi_perfil",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "me"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     }
   ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
   "variable": [
     {
       "key": "base_url",
@@ -137,6 +337,10 @@
     },
     {
       "key": "post_id",
+      "value": ""
+    },
+    {
+      "key": "token",
       "value": ""
     }
   ]
