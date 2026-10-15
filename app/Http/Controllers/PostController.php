@@ -29,8 +29,9 @@ class PostController extends Controller
         $query = Post::with(['images', 'comments', 'user:id,name'])->latest();
 
         // Si viene ?search=..., filtra los posts cuyo título contiene ese texto
-        if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->input('search') . '%');
+         if ($request->filled('search')) {
+            $search = mb_strtolower($request->input('search'));
+            $query->whereRaw('LOWER(title) LIKE ?', ['%' . $search . '%']);
         }
 
         // withQueryString(): los enlaces de página conservan ?search
