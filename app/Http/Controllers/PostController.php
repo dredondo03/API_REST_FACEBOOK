@@ -9,18 +9,14 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Cuántos posts por página: 10 por defecto, mínimo 1, máximo 50
+        $perPage = max(1, min($request->integer('per_page', 10), 50));
+
         $posts = Post::with(['images', 'comments'])
             ->latest()
-            ->get()
-            ->map(function ($post) {
-                $post->images->transform(function ($img) {
-                    $img->image_url = asset('storage/' . $img->image_path);
-                    return $img;
-                });
-                return $post;
-            });
+            ->paginate($perPage);
 
         return response()->json($posts, 200);
     }
@@ -28,11 +24,6 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::with(['images', 'comments'])->findOrFail($id);
-        
-        $post->images->transform(function ($img) {
-            $img->image_url = asset('storage/' . $img->image_path);
-            return $img;
-        });
 
         return response()->json($post, 200);
     }
@@ -40,13 +31,13 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'title'    => 'required|string|max:255',
+            'content'  => 'required|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $post = Post::create([
-            'title' => $request->title,
+            'title'   => $request->title,
             'content' => $request->content,
         ]);
 
@@ -54,7 +45,7 @@ class PostController extends Controller
             foreach ($request->file('images') as $file) {
                 $path = $file->store('posts', 'public');
                 PostImage::create([
-                    'post_id' => $post->id,
+                    'post_id'    => $post->id,
                     'image_path' => $path,
                 ]);
             }
@@ -69,7 +60,7 @@ class PostController extends Controller
         $post->increment('likes_count');
 
         return response()->json([
-            'message' => 'Me gusta añadido correctamente',
+            'message'     => 'Me gusta añadido correctamente',
             'likes_count' => $post->likes_count,
         ], 200);
     }
