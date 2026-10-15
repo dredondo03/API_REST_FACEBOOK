@@ -60,13 +60,20 @@ class PostController extends Controller
         return response()->json($post->load(['images', 'user:id,name']), 201);
     }
 
-    public function like($id)
+    public function like(Request $request, $id)
     {
         $post = Post::findOrFail($id);
-        $post->increment('likes_count');
+
+        // toggle: si el usuario no tenía like, lo agrega; si ya lo tenía, lo quita
+        $result = $post->likedBy()->toggle($request->user()->id);
+        $liked  = count($result['attached']) > 0;
+
+        // likes_count se recalcula contando las filas reales de la tabla likes
+        $post->update(['likes_count' => $post->likedBy()->count()]);
 
         return response()->json([
-            'message'     => 'Me gusta añadido correctamente',
+            'message'     => $liked ? 'Me gusta añadido' : 'Me gusta retirado',
+            'liked'       => $liked,
             'likes_count' => $post->likes_count,
         ], 200);
     }

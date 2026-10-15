@@ -22,4 +22,9 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
+    // Usuarios que le dieron like a este post (a través de la tabla likes)
+    public function likedBy()
+    {
+        return $this->belongsToMany(User::class, 'likes')->withTimestamps();
+    }
 }
