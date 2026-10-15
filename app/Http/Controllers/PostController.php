@@ -11,12 +11,17 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        // Cuántos posts por página: 10 por defecto, mínimo 1, máximo 50
         $perPage = max(1, min($request->integer('per_page', 10), 50));
 
-        $posts = Post::with(['images', 'comments'])
-            ->latest()
-            ->paginate($perPage);
+        $query = Post::with(['images', 'comments'])->latest();
+
+        // Si viene ?search=..., filtra los posts cuyo título contiene ese texto
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->input('search') . '%');
+        }
+
+        // withQueryString(): los enlaces de página conservan ?search
+        $posts = $query->paginate($perPage)->withQueryString();
 
         return response()->json($posts, 200);
     }
