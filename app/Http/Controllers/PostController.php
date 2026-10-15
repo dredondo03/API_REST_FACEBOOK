@@ -13,7 +13,7 @@ class PostController extends Controller
     {
         $perPage = max(1, min($request->integer('per_page', 10), 50));
 
-        $query = Post::with(['images', 'comments'])->latest();
+        $query = Post::with(['images', 'comments', 'user:id,name'])->latest();
 
         // Si viene ?search=..., filtra los posts cuyo título contiene ese texto
         if ($request->filled('search')) {
@@ -28,7 +28,7 @@ class PostController extends Controller
 
     public function show($id)
     {
-        $post = Post::with(['images', 'comments'])->findOrFail($id);
+        $post = Post::with(['images', 'comments', 'user:id,name'])->findOrFail($id);
 
         return response()->json($post, 200);
     }
@@ -42,6 +42,7 @@ class PostController extends Controller
         ]);
 
         $post = Post::create([
+            'user_id' => $request->user()->id, // el autor es el dueño del token
             'title'   => $request->title,
             'content' => $request->content,
         ]);
@@ -56,7 +57,7 @@ class PostController extends Controller
             }
         }
 
-        return response()->json($post->load('images'), 201);
+        return response()->json($post->load(['images', 'user:id,name']), 201);
     }
 
     public function like($id)
@@ -70,9 +71,16 @@ class PostController extends Controller
         ], 200);
     }
 
-    public function destroy($id)
+   public function destroy(Request $request, $id)
     {
         $post = Post::findOrFail($id);
+
+        // Solo el autor puede eliminar su publicación
+        if ((int) $post->user_id !== $request->user()->id) {
+            return response()->json([
+                'message' => 'No puedes eliminar una publicación que no es tuya',
+            ], 403);
+        }
 
         foreach ($post->images as $image) {
             Storage::disk('public')->delete($image->image_path);
@@ -82,4 +90,5 @@ class PostController extends Controller
 
         return response()->json(null, 204);
     }
+
 }
