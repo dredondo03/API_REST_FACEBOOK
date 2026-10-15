@@ -1,0 +1,143 @@
+{
+  "info": {
+    "_postman_id": "2d555d19-62a4-4c13-bfc6-4ebe36c73c4a",
+    "name": "Facebook API - Taller Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58822046",
+    "_collection_link": "https://go.postman.co/collection/58822046-2d555d19-62a4-4c13-bfc6-4ebe36c73c4a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Crear_post",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "title",
+              "value": "publicqacion no se que",
+              "type": "text"
+            },
+            {
+              "key": "content",
+              "value": "el super viajeee",
+              "type": "text"
+            },
+            {
+              "key": "images[]",
+              "type": "file",
+              "src": [
+                "/C:/Users/dredo/OneDrive/Pictures/Screenshots/Captura de pantalla 2026-08-18 184326.png"
+              ]
+            },
+            {
+              "key": "images[]",
+              "type": "file",
+              "src": [
+                "/C:/Users/dredo/OneDrive/Pictures/Screenshots/Captura de pantalla 2026-08-18 192123.png"
+              ]
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/posts",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "posts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar publicaciones",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Comentario",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"author\": \"Darmin\",\r\n  \"content\": \"¡Qué buenas fotos mi bro!\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/posts/{{post_id}}/comments",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "posts",
+            "{{post_id}}",
+            "comments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "likes",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/posts/{{post_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "posts",
+            "{{post_id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    },
+    {
+      "key": "post_id",
+      "value": ""
+    }
+  ]
+}
