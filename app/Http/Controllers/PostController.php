@@ -6,9 +6,22 @@ use App\Models\Post;
 use App\Models\PostImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+/**
+ * @group Publicaciones
+ *
+ * Crear, listar, ver y eliminar publicaciones, y dar me gusta.
+ */
 class PostController extends Controller
-{
+{/**
+     * Listar publicaciones
+     *
+     * Devuelve las publicaciones paginadas, de la más reciente a la más antigua,
+     * con sus imágenes, comentarios y autor.
+     *
+     * @queryParam search string Filtra por texto en el título. Example: viaje
+     * @queryParam page integer Número de página. Example: 1
+     * @queryParam per_page integer Publicaciones por página, de 1 a 50. Example: 10
+     */
     public function index(Request $request)
     {
         $perPage = max(1, min($request->integer('per_page', 10), 50));
@@ -25,14 +38,25 @@ class PostController extends Controller
 
         return response()->json($posts, 200);
     }
-
+    /**
+     * Ver una publicación
+     *
+     * @urlParam id integer required ID de la publicación. Example: 2
+     */
     public function show($id)
     {
         $post = Post::with(['images', 'comments', 'user:id,name'])->findOrFail($id);
 
         return response()->json($post, 200);
     }
-
+    /**
+     * Crear publicación
+     *
+     * Crea una publicación del usuario autenticado. Se envía como form-data
+     * y acepta varias imágenes en el campo images[].
+     *
+     * @authenticated
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -59,7 +83,15 @@ class PostController extends Controller
 
         return response()->json($post->load(['images', 'user:id,name']), 201);
     }
-
+     /**
+     * Dar o quitar me gusta
+     *
+     * Si el usuario no había dado like, lo agrega; si ya lo había dado, lo quita.
+     *
+     * @authenticated
+     * @urlParam id integer required ID de la publicación. Example: 2
+     * @response 200 {"message": "Me gusta añadido", "liked": true, "likes_count": 1}
+     */
     public function like(Request $request, $id)
     {
         $post = Post::findOrFail($id);
@@ -77,7 +109,16 @@ class PostController extends Controller
             'likes_count' => $post->likes_count,
         ], 200);
     }
-
+   /**
+     * Eliminar publicación
+     *
+     * Solo el autor puede eliminarla. Borra también sus imágenes y comentarios.
+     *
+     * @authenticated
+     * @urlParam id integer required ID de la publicación. Example: 2
+     * @response 204
+     * @response 403 {"message": "No puedes eliminar una publicación que no es tuya"}
+     */
    public function destroy(Request $request, $id)
     {
         $post = Post::findOrFail($id);

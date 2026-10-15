@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+/** @group Autenticación */
 class AuthController extends Controller
-{
+{/** Registrar usuario. Devuelve el usuario y su token. */
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         return response()->json(['user' => $user, 'token' => $token], 201);
     }
-
+    /** Iniciar sesión. Devuelve un token nuevo. */
     public function login(Request $request)
     {
         $data = $request->validate([
@@ -44,12 +44,19 @@ class AuthController extends Controller
 
         return response()->json(['user' => $user, 'token' => $token], 200);
     }
-
+    /** 
+     * Ver mi perfil. 
+     * 
+     * @authenticated
+     */
     public function me(Request $request)
     {
         return response()->json($request->user(), 200);
     }
-
+    /** Cerrar sesión. Invalida el token actual.
+     * 
+     *  @authenticated
+     */
     public function logout(Request $request)
     {
         // Borra solo el token con el que se hizo esta petición
