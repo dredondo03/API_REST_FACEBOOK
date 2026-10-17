@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 
+// Versión 1
 Route::prefix('v1')->group(function () {
 
     // Autenticación (públicas)
@@ -25,5 +26,15 @@ Route::prefix('v1')->group(function () {
         Route::delete('/posts/{id}', [PostController::class, 'destroy']);
         Route::post('/posts/{id}/like', [PostController::class, 'like']);
         Route::post('/posts/{id}/comments', [CommentController::class, 'store']);
+    });
+});
+
+// Versión 2: convive con la v1 sin romperla
+Route::prefix('v2')->group(function () {
+    Route::get('/posts', function () {
+        return response()->json([
+            'version' => 'v2',
+            'message' => 'Aquí irían los cambios incompatibles con la v1',
+        ]);
     });
 });
